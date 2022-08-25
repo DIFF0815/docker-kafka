@@ -13,4 +13,4 @@ cp docker-compose.example.yml docker-compose.yml
 docker-compose up 
 ```
 * 使用
-在项目里面填写在.env里面填写的ip和端口
+在项目里面填写在.env里面填写的host和端口
