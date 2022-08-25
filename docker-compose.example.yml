@@ -10,6 +10,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    expose:
+      - 2181
     restart: always
 
   kafka_node1:
@@ -25,7 +27,47 @@ services:
       KAFKA_CREATE_TOPICS: "test"
       KAFKA_BROKER_NO: 0
       KAFKA_LISTENERS: PLAINTEXT://kafka_node1:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_SERVICE_PUBLIC_IP}:${KAFKA_SERVICE_PUBLIC_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_SERVICE_PUBLIC_IP_1}:${KAFKA_SERVICE_PUBLIC_PORT_1}
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms16M"
+    restart: always
+
+  kafka_node2:
+    image: wurstmeister/kafka
+    container_name: kafka_node2
+    depends_on:
+      - zookeeper
+    ports:
+      - "9093:9093"
+    volumes:
+      - ${DATA_DIR}/kafka:/kafka
+    environment:
+      KAFKA_CREATE_TOPICS: "test"
+      KAFKA_BROKER_NO: 0
+      KAFKA_LISTENERS: PLAINTEXT://kafka_node2:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_SERVICE_PUBLIC_IP_2}:${KAFKA_SERVICE_PUBLIC_PORT_2}
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms16M"
+    restart: always
+
+  kafka_node3:
+    image: wurstmeister/kafka
+    container_name: kafka_node3
+    depends_on:
+      - zookeeper
+    ports:
+      - "9094:9094"
+    volumes:
+      - ${DATA_DIR}/kafka:/kafka
+    environment:
+      KAFKA_CREATE_TOPICS: "test"
+      KAFKA_BROKER_NO: 0
+      KAFKA_LISTENERS: PLAINTEXT://kafka_node3:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_SERVICE_PUBLIC_IP_3}:${KAFKA_SERVICE_PUBLIC_PORT_3}
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
