@@ -12,3 +12,5 @@ cp docker-compose.example.yml docker-compose.yml
 #执行下面命令（会构建镜像和启动容器）
 docker-compose up 
 ```
+* 使用
+在项目里面填写在.env里面填写的ip和端口
